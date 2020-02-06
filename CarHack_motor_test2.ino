@@ -6,7 +6,7 @@ Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 
 // Select which 'port' M1, M2, M3 or M4. In this case, M1
 Adafruit_DCMotor *motor1 = AFMS.getMotor(1);
-Adafruit_DCMotor *motor2 = AFMS.getMotor(3);
+Adafruit_DCMotor *motor2 = AFMS.getMotor(4);
 
 
 
@@ -28,7 +28,7 @@ void setup() {
   AFMS.begin();  // create with the default frequency 1.6KHz
   // set motor speed, turn them on for a moment then back off
   Serial.println("initializing");
-  motor1->setSpeed(200);
+  motor1->setSpeed(80);
   motor1->run(FORWARD);
   motor1->run(RELEASE);
   motor2->setSpeed(200);
@@ -68,18 +68,29 @@ void loop() {
   Serial.print(UltraSensor3);
   Serial.print(" cm");
   Serial.println();
-  
+
+
  if (UltraSensor1 < 20) {
     Serial.println("backward");
+    motor1->run(RELEASE);
+    if(UltraSensor2 <20){
+      motor2->run(FORWARD);
+    }
     motor1->run(BACKWARD);
-    motor2->run(RELEASE);
+    delay(2000);
+    motor1->run(RELEASE);
+    delay(1000);
+    if (UltraSensor2 <20){
+    motor2->run(FORWARD);
+    delay(500);
+    }
   }
 
 
   if (UltraSensor1 > 20) {
     Serial.println("forward");
     motor1->run(FORWARD);
-    motor2->run(FORWARD);
+    motor2->run(RELEASE);
   }
 
 
